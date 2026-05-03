@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Study Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #faf6ef;
+      --ink: #1a1208;
+      --amber: #d4820a;
+      --amber-light: #f5c855;
+      --sage: #4a7c59;
+      --rust: #c0442b;
+      --slate: #2d3b4e;
+      --mist: #e8ede8;
+      --paper: #fff9f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      color: var(--amber-light);
+      letter-spacing: -0.02em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--amber-light); }
+
+    /* ─── HERO ─── */
+    #home {
+      min-height: 92vh;
+      background: var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 6rem 5%;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #home::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,130,10,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-text h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.08;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-text h1 span { color: var(--amber-light); }
+
+    .hero-text p {
+      color: #aaa;
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--amber);
+      color: white;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .hero-cta:hover { background: #b86c00; transform: translateY(-2px); }
+
+    .hero-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .hero-card:hover { border-color: rgba(212,130,10,0.5); }
+    .hero-card:nth-child(2) { margin-top: 2rem; }
+    .hero-card:nth-child(4) { margin-top: 2rem; }
+
+    .hero-card .icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      color: var(--amber-light);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-card p { color: #888; font-size: 0.85rem; line-height: 1.5; }
+
+    /* ─── SECTION WRAPPER ─── */
+    .section {
+      padding: 6rem 5%;
+    }
+
+    .section-alt { background: var(--paper); }
+
+    .section-header {
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.12;
+    }
+
+    .section-header p {
+      color: #555;
+      max-width: 560px;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    /* ─── GOAL SECTION ─── */
+    .goal-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .goal-quote {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.4;
+      border-left: 4px solid var(--amber);
+      padding-left: 1.5rem;
+    }
+
+    .goal-stat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .stat-pill {
+      background: var(--mist);
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .stat-pill .num {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--amber);
+      min-width: 3rem;
+    }
+
+    .stat-pill .label { font-size: 0.9rem; color: #444; font-weight: 500; }
+
+    /* ─── TECHNIQUES ─── */
+    #techniques { background: var(--ink); }
+    #techniques .section-header h2 { color: var(--cream); }
+    #techniques .section-header p { color: #999; }
+
+    .techniques-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .technique-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .technique-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .technique-card.amber::before { background: var(--amber); }
+    .technique-card.sage::before { background: var(--sage); }
+    .technique-card.rust::before { background: var(--rust); }
+
+    .technique-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-4px); }
+
+    .technique-num {
+      font-family: 'Fraunces', serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+      margin-bottom: -1rem;
+    }
+
+    .technique-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      color: var(--amber-light);
+      margin-bottom: 0.8rem;
+    }
+
+    .technique-card p { color: #aaa; font-size: 0.92rem; line-height: 1.6; }
+
+    /* Steps & Tips */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
+
+    .list-box {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      border: 1px solid #e5e0d5;
+    }
+
+    .list-box h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem;
+      margin-bottom: 1.2rem;
+      color: var(--ink);
+    }
+
+    ol.styled, ul.styled { padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    ol.styled li { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.95rem; }
+    ol.styled li::before {
+      content: counter(item);
+      counter-increment: item;
+      min-width: 28px; height: 28px;
+      background: var(--amber);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    ol.styled { counter-reset: item; }
+
+    ul.styled li { display: flex; align-items: flex-start; gap: 0.8rem; }
+    ul.styled li::before { content: '→'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+
+    /* Definition list */
+    .def-list { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1.5rem; }
+
+    .def-item dt {
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--amber);
+      margin-bottom: 0.2rem;
+    }
+
+    .def-item dd { color: #555; font-size: 0.93rem; padding-left: 1rem; border-left: 2px solid #e0d8cc; }
+
+    /* ─── TIME MANAGEMENT ─── */
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.95rem;
+    }
+
+    .schedule-table th {
+      background: var(--ink);
+      color: var(--amber-light);
+      font-family: 'Fraunces', serif;
+      font-size: 0.9rem;
+      padding: 1rem 1.4rem;
+      text-align: left;
+      letter-spacing: 0.05em;
+    }
+
+    .schedule-table td {
+      padding: 0.9rem 1.4rem;
+      border-bottom: 1px solid #e8e2d8;
+    }
+
+    .schedule-table tr:nth-child(even) td { background: #f5f0e8; }
+    .schedule-table tr:hover td { background: #ede6d6; }
+
+    .time-tips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .time-tip {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: white;
+      border: 1px solid #e0d8cc;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+
+    .time-tip .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--sage);
+      flex-shrink: 0;
+    }
+
+    /* ─── MULTIMEDIA ─── */
+    .media-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .media-card {
+      background: white;
+      border: 1px solid #e0d8cc;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .media-card-header {
+      background: var(--slate);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .media-card-header h3 {
+      font-family: 'Fraunces', serif;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .media-card-header .media-icon { font-size: 1.4rem; }
+
+    .media-card-body { padding: 1.5rem; }
+
+    .media-card-body p { color: #666; font-size: 0.93rem; margin-bottom: 1rem; }
+
+    iframe { width: 100%; border-radius: 8px; border: none; }
+
+    .img-showcase {
+      margin-top: 2rem;
+      background: white;
+      border: 1px solid #e0d8cc;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .img-showcase-header {
+      background: var(--slate);
+      padding: 1.2rem 1.5rem;
+    }
+
+    .img-showcase-header h3 {
+      font-family: 'Fraunces', serif;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .img-showcase-body {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .study-img-placeholder {
+      width: 260px;
+      height: 180px;
+      background: linear-gradient(135deg, #e8ede8, #d4e0d4);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--sage);
+      font-size: 3rem;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--ink); }
+    #contact .section-header h2 { color: var(--cream); }
+    #contact .section-label { color: var(--amber-light); }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      max-width: 720px;
+    }
+
+    .form-full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--amber);
+    }
+
+    select option { background: var(--ink); }
+    textarea { resize: vertical; min-height: 120px; }
+
+    .checkbox-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 0.93rem;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] { accent-color: var(--amber); width: 16px; height: 16px; }
+
+    .form-note {
+      color: #777;
+      font-size: 0.82rem;
+      margin-top: 0.5rem;
+    }
+
+    .submit-btn {
+      grid-column: 1 / -1;
+      background: var(--amber);
+      color: white;
+      border: none;
+      padding: 0.9rem 2.5rem;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      justify-self: start;
+    }
+
+    .submit-btn:hover { background: #b86c00; transform: translateY(-2px); }
+
+    /* ─── QUOTE BANNER ─── */
+    .quote-banner {
+      background: var(--amber);
+      padding: 4rem 5%;
+      text-align: center;
+    }
+
+    .quote-banner blockquote {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-style: italic;
+      color: white;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.45;
+    }
+
+    .quote-banner cite {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-top: 1rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #0f0c07;
+      padding: 2.5rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p { color: #555; font-size: 0.85rem; }
+
+    footer a { color: var(--amber); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--amber-light); }
+
+    .back-top {
+      color: #555;
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .back-top:hover { color: var(--amber-light); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 860px) {
+      #home { grid-template-columns: 1fr; }
+      .hero-cards { display: none; }
+      .techniques-grid { grid-template-columns: 1fr; }
+      .goal-grid, .two-col, .media-grid, .time-tips { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-full { grid-column: 1; }
+      .submit-btn { grid-column: 1; }
+      nav ul { gap: 1rem; }
+      .img-showcase-body { grid-template-columns: 1fr; }
+      .study-img-placeholder { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ──────────── NAV ──────────── -->
+<nav>
+  <div class="nav-logo">📚 Smart Study Hub</div>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#techniques">Techniques</a></li>
+    <li><a href="#time">Time</a></li>
+    <li><a href="#multimedia">Media</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ──────────── HOME ──────────── -->
+<section id="home">
+  <div class="hero-text">
+    <h1>Welcome to<br><span>Smart Study</span><br>Hub</h1>
+    <p>Studying doesn't have to be stressful or boring. With the right techniques, you can learn faster, remember better, and score higher.</p>
+    <a href="#techniques" class="hero-cta">Explore Techniques →</a>
+  </div>
+  <div class="hero-cards">
+    <div class="hero-card">
+      <div class="icon">🧠</div>
+      <h3>Study Techniques</h3>
+      <p>Pomodoro, Active Recall, Spaced Repetition and more.</p>
+    </div>
+    <div class="hero-card">
+      <div class="icon">⏰</div>
+      <h3>Time Management</h3>
+      <p>Plan smarter, reduce stress, stay ahead.</p>
+    </div>
+    <div class="hero-card">
+      <div class="icon">🎯</div>
+      <h3>Goal Setting</h3>
+      <p>Clear targets keep you focused and motivated.</p>
+    </div>
+    <div class="hero-card">
+      <div class="icon">🏆</div>
+      <h3>Exam Prep</h3>
+      <p>Proven strategies to perform your very best.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── GOAL ──────────── -->
+<section id="goal" class="section section-alt">
+  <div class="goal-grid">
+    <div>
+      <div class="section-header">
+        <span class="section-label">Our Mission</span>
+        <h2>Our Goal</h2>
+      </div>
+      <p class="goal-quote">"Our goal is to help students develop smart study strategies, manage their time effectively, and stay motivated throughout their academic journey."</p>
+      <p style="margin-top:1.5rem; color:#555; font-size:0.95rem;">Explore different sections to learn powerful study techniques, time management tips, and exam preparation strategies that actually work.</p>
+    </div>
+    <div class="goal-stat-list">
+      <div class="stat-pill">
+        <div class="num">3×</div>
+        <div class="label">Faster learning with spaced repetition</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num">25m</div>
+        <div class="label">Optimal focus session (Pomodoro)</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num">80%</div>
+        <div class="label">Better retention with active recall</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── TECHNIQUES ──────────── -->
+<section id="techniques" class="section">
+  <div class="section-header">
+    <span class="section-label" style="color:var(--amber-light)">Study Techniques</span>
+    <h2>Effective Study Techniques</h2>
+    <p style="color:#999;">Science-backed methods to supercharge your learning.</p>
+  </div>
+
+  <div class="techniques-grid">
+    <div class="technique-card amber">
+      <div class="technique-num">01</div>
+      <h3>Pomodoro Technique</h3>
+      <p>Study for 25 minutes and take a 5-minute break. After four sessions, take a longer break. This method improves focus and prevents burnout.</p>
+    </div>
+    <div class="technique-card sage">
+      <div class="technique-num">02</div>
+      <h3>Active Recall</h3>
+      <p>Instead of rereading notes, test yourself by recalling information. This strengthens memory and understanding far more effectively.</p>
+    </div>
+    <div class="technique-card rust">
+      <div class="technique-num">03</div>
+      <h3>Spaced Repetition</h3>
+      <p>Review topics at increasing intervals over time. This helps transfer information into long-term memory where it stays.</p>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:3rem;">
+    <div class="list-box">
+      <h3>How to Study Effectively</h3>
+      <ol class="styled">
+        <li>Set a clear goal</li>
+        <li>Remove distractions</li>
+        <li>Study in short sessions</li>
+        <li>Take breaks</li>
+        <li>Revise regularly</li>
+      </ol>
+    </div>
+    <div class="list-box">
+      <h3>Quick Study Tips</h3>
+      <ul class="styled">
+        <li>Keep your study area clean</li>
+        <li>Stay hydrated</li>
+        <li>Avoid multitasking</li>
+        <li>Use diagrams and charts</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem;">
+    <div class="list-box" style="max-width:560px;">
+      <h3>Key Terms</h3>
+      <dl class="def-list">
+        <div class="def-item">
+          <dt>Pomodoro Technique</dt>
+          <dd>A time management method using short focused sessions with regular breaks.</dd>
+        </div>
+        <div class="def-item">
+          <dt>Active Recall</dt>
+          <dd>Testing yourself to retrieve information from memory, improving retention.</dd>
+        </div>
+        <div class="def-item">
+          <dt>Spaced Repetition</dt>
+          <dd>Reviewing material at strategic intervals to move it into long-term memory.</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── TIME MANAGEMENT ──────────── -->
+<section id="time" class="section section-alt">
+  <div class="section-header">
+    <span class="section-label">Time Management</span>
+    <h2>Time Management Tips</h2>
+    <p>Managing time properly helps reduce stress and improves productivity. Always plan your day in advance and prioritize important tasks.</p>
+  </div>
+
+  <table class="schedule-table">
+    <thead>
+      <tr>
+        <th>⏱ Time</th>
+        <th>📚 Activity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>6:00 – 7:00 AM</td><td>Revision</td></tr>
+      <tr><td>10:00 – 12:00 PM</td><td>Study Session</td></tr>
+      <tr><td>2:00 – 3:00 PM</td><td>Practice Questions</td></tr>
+      <tr><td>6:00 – 7:00 PM</td><td>Review</td></tr>
+    </tbody>
+  </table>
+
+  <div class="time-tips">
+    <div class="time-tip"><span class="dot"></span>Use a planner every day</div>
+    <div class="time-tip"><span class="dot"></span>Set clear deadlines</div>
+    <div class="time-tip"><span class="dot"></span>Avoid procrastination</div>
+    <div class="time-tip"><span class="dot"></span>Break big tasks into small parts</div>
+  </div>
+</section>
+
+<!-- ──────────── MULTIMEDIA ──────────── -->
+<section id="multimedia" class="section">
+  <div class="section-header">
+    <span class="section-label">Multimedia</span>
+    <h2>Learning Resources</h2>
+  </div>
+
+  <div class="media-grid">
+    <div class="media-card">
+      <div class="media-card-header">
+        <span class="media-icon">🎵</span>
+        <h3>Relaxing Study Music</h3>
+      </div>
+      <div class="media-card-body">
+        <p>Listen to calming music while studying to improve focus and reduce anxiety.</p>
+        <!-- YouTube Music Embed[cite: 1] -->
+        <iframe height="150" src="https://www.youtube.com/embed/I3OJUwILelU" title="Study Music" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="media-card">
+      <div class="media-card-header">
+        <span class="media-icon">🎥</span>
+        <h3>Study Tips Video</h3>
+      </div>
+      <div class="media-card-body">
+        <p>Watch this video to learn effective study strategies from top students.</p>
+        <!-- YouTube Video Embed[cite: 1] -->
+        <iframe height="215" src="https://www.youtube.com/embed/TjPFZaMe2yw" title="Study Tips Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="img-showcase">
+    <div class="img-showcase-header">
+      <h3>🖼️ Study Environment</h3>
+    </div>
+    <div class="img-showcase-body">
+      <div class="study-img-placeholder">
+        🗂️
+      </div>
+      <div>
+        <h3 style="font-family:'Fraunces',serif; margin-bottom:0.8rem;">Your Space Matters</h3>
+        <p style="color:#555; line-height:1.7;">A clean and organized study space helps improve concentration and productivity. Keep your desk free of clutter, ensure good lighting, and remove distractions to create the ideal learning environment.</p>
+        <p style="color:#888; font-size:0.85rem; margin-top:0.8rem;">💡 Tip: Replace <code style="background:#f0ebe0;padding:2px 6px;border-radius:3px;">src=""</code> in the <code style="background:#f0ebe0;padding:2px 6px;border-radius:3px;">&lt;img&gt;</code> tag with your own image path.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── QUOTE BANNER ──────────── -->
+<div class="quote-banner">
+  <blockquote>
+    "Success doesn't come from what you do occasionally, but from what you do consistently."
+    <cite>— Motivational Quote</cite>
+  </blockquote>
+</div>
+
+<!-- ──────────── CONTACT ──────────── -->
+<section id="contact" class="section">
+  <div class="section-header">
+    <span class="section-label">Get in Touch</span>
+    <h2>Contact Us</h2>
+    <p style="color:#999;">We would love to hear your feedback! Fill out the form below.</p>
+  </div>
+
+  <form onsubmit="return false;">
+    <div class="form-grid">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Your full name" required/>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@email.com" required/>
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Create a password" required/>
+      </div>
+      <div>
+        <label for="preference">Study Preference</label>
+        <select id="preference" required>
+          <option value="" disabled selected>Select preference</option>
+          <option value="morning">Morning</option>
+          <option value="night">Night</option>
+        </select>
+      </div>
+      <div class="form-full">
+        <label>Subjects You Like</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" value="math"/> Mathematics</label>
+          <label><input type="checkbox" value="science"/> Science</label>
+          <label><input type="checkbox" value="english"/> English</label>
+          <label><input type="checkbox" value="history"/> History</label>
+          <label><input type="checkbox" value="cs"/> Computer Science</label>
+        </div>
+      </div>
+      <div class="form-full">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Share your feedback or questions..." required></textarea>
+      </div>
+      <p class="form-note form-full">⚠️ All fields are required. Please provide accurate information.</p>
+      <button type="submit" class="submit-btn">Send Message →</button>
+    </div>
+  </form>
+</section>
+
+<!-- ──────────── FOOTER ──────────── -->
+<footer>
+  <p>© 2026 Study Tips Website | Designed by <strong style="color:#777">Hamshitha</strong></p>
+  <p><a href="mailto:yourname@email.com">📧 Contact: yourname@email.com</a></p>
+  <a href="#home" class="back-top">↑ Back to top</a>
+</footer>
+
+</body>
+</html>
